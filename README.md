@@ -23,11 +23,11 @@
 
 ##### Without Argument
 
-Pada command prompt, jalankan `bin/solution`
+Pada command prompt, jalankan `bin\solution`
 
 ##### With Two Arguments
 
-Pada command prompt, jalankan `bin/solution INPUT_FILE_LOCATION OUTPUT_FILE_LOCATION`
+Pada command prompt, jalankan `bin\solution INPUT_FILE_LOCATION OUTPUT_FILE_LOCATION`
 
 Lokasi file relatif terhadap folder test/
 
