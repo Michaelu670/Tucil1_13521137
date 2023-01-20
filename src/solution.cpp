@@ -72,12 +72,11 @@ void hitungJawaban(vector<char> &op, vector<int> &nilaiKartu, vector<string> &an
         ans.push_back(ss.str());
     }
     // a op (b op (c op d))
-    // tidak perlu karena sama dengan ((a op b) op c) op d
-    // if (isSame(operate(a, operate(b, operate(c, d, op[2]), op[1]), op[0]), 24)) {
-    //     stringstream ss;
-    //     ss << "" << a << " " << op[0] << " (" << b << " " << op[1] << " (" << c << " " << op[2] << " " << d << "))";
-    //     ans.push_back(ss.str());
-    // }
+    if (isSame(operate(a, operate(b, operate(c, d, op[2]), op[1]), op[0]), 24)) {
+        stringstream ss;
+        ss << "" << a << " " << op[0] << " (" << b << " " << op[1] << " (" << c << " " << op[2] << " " << d << "))";
+        ans.push_back(ss.str());
+    }
     // a op ((b op c) op d)
     if (isSame(operate(a, operate(operate(b, c, op[1]), d, op[2]), op[0]), 24)) {
         stringstream ss;
