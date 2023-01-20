@@ -222,9 +222,8 @@ int32_t main(int argc, char *argv[]) {
                 string path_output = path_prefix + nama_file;
                 ofstream output_stream(path_output);
 
-                if (isRandom) {
-                    output_stream << "Kartu : " << kartu[0] << ' ' << kartu[1] << ' ' << kartu[2] << ' ' << kartu[3] << '\n';
-                }
+                output_stream << "Kartu : " << kartu[0] << ' ' << kartu[1] << ' ' << kartu[2] << ' ' << kartu[3] << '\n';
+                
 
                 if (ans.size() == 0) {
                     output_stream << "no solution found\n";
