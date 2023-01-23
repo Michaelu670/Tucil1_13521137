@@ -9,6 +9,10 @@ map<string, int> daftarNilaiKartu;
 const int JENIS_KARTU = 13;
 const double EPS = 1e-6;
 
+/**
+ * @brief inisialisasi program
+ * 
+ */
 void init() {
     // kartu angka 2-9
     string tmp = "1";
@@ -32,10 +36,20 @@ void init() {
     srand(time(NULL));
 }
 
+/**
+ * @return string berupa kartu random
+ */
 string randomCard() {
     return kartuValid[rand() % JENIS_KARTU];
 }
 
+/**
+ * @brief mengembalikan true jika kartu valid
+ * 
+ * @param c kartu
+ * @return true 
+ * @return false 
+ */
 bool isKartuValid(string c) {
     for(auto x : kartuValid) {
         if(c == x) return true;
@@ -43,10 +57,26 @@ bool isKartuValid(string c) {
     return false;
 }
 
+/**
+ * @brief mengembalikan true jika selisih a dan b kurang dari epsilon (EPS)
+ * 
+ * @param a 
+ * @param b 
+ * @return true 
+ * @return false 
+ */
 bool isSame (double a, double b) {
     return (a < b + EPS) && (b < a + EPS);
 }
 
+/**
+ * @brief Mengembalikan hasil a op b
+ * 
+ * @param a 
+ * @param b 
+ * @param op anggota {+, -, *, /}
+ * @return (double) a op b
+ */
 double operate(double a, double b, char op) {
     if(op == '+') return a + b;
     if(op == '-') return a - b;
@@ -56,6 +86,13 @@ double operate(double a, double b, char op) {
     return -1;
 }
 
+/**
+ * @brief Menggunakan urutan kartu dan operasi untuk mengisi ans
+ * 
+ * @param op urutan operasi
+ * @param nilaiKartu urutan kartu
+ * @param ans menyimpan jawaban
+ */
 void hitungJawaban(vector<char> &op, vector<int> &nilaiKartu, vector<string> &ans) {
     double a = nilaiKartu[0], b = nilaiKartu[1], c = nilaiKartu[2], d = nilaiKartu[3];
     // Lakukan seluruh kemungkinan urutan
@@ -91,6 +128,14 @@ void hitungJawaban(vector<char> &op, vector<int> &nilaiKartu, vector<string> &an
     }
 }
 
+/**
+ * @brief membangkitkan kemungkinan operasi untuk mengisi ans
+ * 
+ * @param opNum index, bernilai 0 pada pemanggilan
+ * @param op operasi yang digunakan, kosong pada pemanggilan
+ * @param nilaiKartu permutasi kartu
+ * @param ans menyimpan jawaban
+ */
 void searchKemungkinanOperasi(int opNum, vector<char> op, vector<int> &nilaiKartu, vector<string> &ans) {
     if(opNum == 3) {
         hitungJawaban(op, nilaiKartu, ans);
@@ -103,6 +148,14 @@ void searchKemungkinanOperasi(int opNum, vector<char> op, vector<int> &nilaiKart
     }
 }
 
+/**
+ * @brief membangkitkan permutasi nilai kartu untuk mengisi ans
+ * 
+ * @param idx harus bernilai 0 pada pemanggilan
+ * @param nilaiKartu menyimpan hasil permutasi, harus kosong pada pemanggilan
+ * @param jumlahKartu adalah frequency array dari kartu pada input, berukuran JENIS_KARTU + 1
+ * @param ans menyimpan jawaban
+ */
 void permutasiNilaiKartu(int idx, vector<int> nilaiKartu, vector<int> jumlahKartu, vector<string> &ans) {
     if(idx == 4) {
         searchKemungkinanOperasi(0, vector<char>(0), nilaiKartu, ans);
@@ -119,10 +172,36 @@ void permutasiNilaiKartu(int idx, vector<int> nilaiKartu, vector<int> jumlahKart
     }
 }
 
+/**
+ * @brief output jawaban dan durasi
+ * 
+ * @param output_stream cout atau ostream lain
+ * @param ans vector<string> berisi jawaban
+ * @param duration durasi dalam milisekon
+ */
+void output(ostream& output_stream, const vector<string>& ans, chrono::milliseconds duration) {
+    if (ans.size() == 0) {
+        output_stream << "no solution found\n";
+    }
+    else if (ans.size() == 1) {
+        output_stream << ans.size() << " solution found\n";
+    }
+    else {
+        output_stream << ans.size() << " solutions found\n";
+    }
+    
+    for(string s: ans) {
+        output_stream << s << '\n';
+    }
+    output_stream<< "Execution time = " << duration.count() << " milliseconds" << endl;
+}
+
 int32_t main(int argc, char *argv[]) {
     init();
     string path_prefix = "test/";
     bool strictCommandOutput = false;
+
+    // Arguments, for testing purpose
     if(argc == 2 || argc > 3) {
         cout << "Invalid Argument count!" << endl;
         return 0;
@@ -191,23 +270,9 @@ int32_t main(int argc, char *argv[]) {
     permutasiNilaiKartu(0, vector<int>(), jumlahKartu, ans);
 
     auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
 
-    if (ans.size() == 0) {
-        cout << "no solution found\n";
-    }
-    else if (ans.size() == 1) {
-        cout << ans.size() << " solution found\n";
-    }
-    else {
-        cout << ans.size() << " solutions found\n";
-    }
-    
-    for(string s: ans) {
-        cout << s << '\n';
-    }
-
-    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "Execution time = " << duration.count() << " microseconds" << endl;
+    output(cout, ans, duration);
 
     if (!strictCommandOutput) {
         while(true) {
@@ -222,21 +287,7 @@ int32_t main(int argc, char *argv[]) {
                 ofstream output_stream(path_output);
 
                 output_stream << "Kartu : " << kartu[0] << ' ' << kartu[1] << ' ' << kartu[2] << ' ' << kartu[3] << '\n';
-                
-
-                if (ans.size() == 0) {
-                    output_stream << "no solution found\n";
-                }
-                else if (ans.size() == 1) {
-                    output_stream << ans.size() << " solution found\n";
-                }
-                else {
-                    output_stream << ans.size() << " solutions found\n";
-                }
-                
-                for(string s: ans) {
-                    output_stream << s << '\n';
-                }
+                output(output_stream, ans, duration);
 
                 cout << "Solusi sudah dimasukkan ke " << path_output << '\n';
                 break;
