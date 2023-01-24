@@ -218,6 +218,9 @@ int32_t main(int argc, char *argv[]) {
         }
         strictCommandOutput = true;
     }
+    else if(argc == 1) {
+        cout << "Masukkan 4 kartu (contoh: A 8 9 Q):\n";
+    }
 
     // Input
     vector<string> kartu(4);
